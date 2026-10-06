@@ -1,0 +1,47 @@
+# CloudFormationテンプレートの形式バージョン。作成日ではなくこの固定値を指定する
+AWSTemplateFormatVersion: '2010-09-09'
+
+# このテンプレートの説明
+Description: Network Resources for cloudformation-iac-lab
+
+# 作成するAWSリソースを定義する
+Resources:
+  # テンプレート内でこのVPCを識別する名前:VPC
+  VPC:
+    #作成するリソースの種類:VPC
+    Type: AWS::EC2::VPC
+    Properties:
+      # VPC全体で使用するプライベートIPアドレスの範囲
+      CidrBlock: '10.0.0.0/16'
+      
+      # EC2のテナンシーを通常の共有ハードウェア方式にする
+      InstanceTenancy: default
+
+      # 対象となるEC2へのパブリックDNSホスト名の割り当てを有効にする
+      # この設定だけでEC2にパブリックIPがつくわけではない
+      EnableDnsHostnames: true
+      
+      # VPC内でAmazon提供のDNSによる名前解決を有効にする
+      EnableDnsSupport: true
+
+      # 管理・識別用のタグ
+      Tags:
+        # コンソールの名前欄などに表示される名前
+        - Key: Name
+          Value: sample-vpc
+
+        # 所属するプロジェクト
+        - Key: Project
+          Value: cloudformation-iac-lab
+
+        # 環境の用途
+        - Key: Environment
+          Value: learning
+# スタックの「出力」タブなどで確認できる値
+Outputs:
+  # 出力項目の名前
+  VpcId:
+    Description: Created VPC ID
+
+    # 論理ID「VPC」を参照し、作成されたVPC IDを取得する
+    Value: !Ref VPC 
