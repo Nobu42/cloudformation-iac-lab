@@ -1,47 +1,48 @@
-# CloudFormationテンプレートの形式バージョン。作成日ではなくこの固定値を指定する
+# CloudFormation template format version, not the creation date
 AWSTemplateFormatVersion: '2010-09-09'
 
-# このテンプレートの説明
+# Template description
 Description: Network Resources for cloudformation-iac-lab
 
-# 作成するAWSリソースを定義する
+# Define AWS resources to create
 Resources:
-  # テンプレート内でこのVPCを識別する名前:VPC
+  # Logical ID of the VPC within this template
   VPC:
-    #作成するリソースの種類:VPC
+    # Resource type: VPC
     Type: AWS::EC2::VPC
     Properties:
-      # VPC全体で使用するプライベートIPアドレスの範囲
+      # Private IPv4 address range for the VPC
       CidrBlock: '10.0.0.0/16'
-      
-      # EC2のテナンシーを通常の共有ハードウェア方式にする
+
+      # Use default shared hardware tenancy for EC2 instances
       InstanceTenancy: default
 
-      # 対象となるEC2へのパブリックDNSホスト名の割り当てを有効にする
-      # この設定だけでEC2にパブリックIPがつくわけではない
+      # Enable public DNS hostnames for eligible EC2 instances
+      # This setting does not assign public IP addresses
       EnableDnsHostnames: true
-      
-      # VPC内でAmazon提供のDNSによる名前解決を有効にする
+
+      # Enable DNS resolution using the Amazon-provided DNS server
       EnableDnsSupport: true
 
-      # 管理・識別用のタグ
+      # Tags for resource identification and management
       Tags:
-        # コンソールの名前欄などに表示される名前
+        # Resource name displayed in the AWS console
         - Key: Name
           Value: sample-vpc
 
-        # 所属するプロジェクト
+        # Project name
         - Key: Project
           Value: cloudformation-iac-lab
 
-        # 環境の用途
+        # Environment purpose
         - Key: Environment
           Value: learning
-# スタックの「出力」タブなどで確認できる値
+
+# Values displayed in the stack Outputs tab
 Outputs:
-  # 出力項目の名前
+  # Output key
   VpcId:
     Description: Created VPC ID
 
-    # 論理ID「VPC」を参照し、作成されたVPC IDを取得する
-    Value: !Ref VPC 
+    # Ref returns the ID of the VPC created by this template
+    Value: !Ref VPC
