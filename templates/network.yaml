@@ -114,6 +114,24 @@ Resources:
           Value: learning
         - Key: Type
           Value: private
+    # Create an Internet Gateway.
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: sample-igw
+        - Key: Project
+          Value: cloudformation-iac-lab
+        - Key: Environment
+          Value: learning
+
+  # Attach the Internet Gateway to the VPC.
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
 
 # Values displayed in the stack Outputs tab
 Outputs:
