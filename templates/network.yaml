@@ -38,6 +38,83 @@ Resources:
         - Key: Environment
           Value: learning
 
+  # Public subnet in AZ in a.
+  PublicSubnet01:
+    Type: AWS::EC2::Subnet
+    Properties:
+      # Reference the VPC defined in this template.
+      VpcId: !Ref VPC
+      CidrBlock: '10.0.0.0/20'
+      AvailabilityZone: ap-northeast-1a
+
+      # Automatically assign public IPv4 addresses to EC2 instances.
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: sample-subnet-public01
+        - Key: Project
+          Value: cloudformation-iac-lab
+        - Key: Environment
+          Value: learning
+        - Key: Type
+          Value: public
+
+  # Public subnet in AZ c.
+  PublicSubnet02:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: '10.0.16.0/20'
+      AvailabilityZone: ap-northeast-1c
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: sample-subnet-public02
+        - Key: Project
+          Value: cloudformation-iac-lab
+        - Key: Environment
+          Value: learning
+        - Key: Type
+          Value: public
+
+  # Private subnet in AZ a.
+  PrivateSubnet01:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: '10.0.64.0/20'
+      AvailabilityZone: ap-northeast-1a
+
+      # Do not automatically assign public IPv4 addresses.
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: sample-subnet-private01
+        - Key: Project
+          Value: cloudformation-iac-lab
+        - Key: Environment
+          Value: learning
+        - Key: Type
+          Value: private
+
+  # Private subnet in AZ c.
+  PrivateSubnet02:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: '10.0.80.0/20'
+      AvailabilityZone: ap-northeast-1c
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: sample-subnet-private02
+        - Key: Project
+          Value: cloudformation-iac-lab
+        - Key: Environment
+          Value: learning
+        - Key: Type
+          Value: private
+
 # Values displayed in the stack Outputs tab
 Outputs:
   # Output key
