@@ -1,0 +1,56 @@
+" Basic Vim settings without third-party plugins.
+set nocompatible
+set noloadplugins
+set encoding=utf-8
+set fileencoding=utf-8
+
+" Display.
+set number
+set cursorline
+set showmatch
+set laststatus=2
+set wildmenu
+set title
+set nowrap
+set scrolloff=5
+set sidescrolloff=5
+set colorcolumn=120
+set list
+set listchars=tab:>-,trail:.,extends:>,precedes:<
+
+" Editing and optional system clipboard support.
+set backspace=indent,eol,start
+if has('clipboard')
+  set clipboard+=unnamedplus
+endif
+
+" Search.
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+nnoremap <silent> <Esc><Esc> :nohlsearch<CR>
+
+" Default indentation: four spaces.
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set autoindent
+
+" Use Vim's built-in filetype detection, indentation, and syntax.
+filetype indent on
+syntax enable
+
+" Keep custom rules in one group so reloading is safe.
+augroup BasicFileSettings
+  autocmd!
+  autocmd BufRead,BufNewFile *.tf,*.tfvars setfiletype terraform
+  autocmd BufRead,BufNewFile *.yaml,*.yml setfiletype yaml
+  autocmd BufRead,BufNewFile *.sh setfiletype sh
+  autocmd BufRead,BufNewFile *.json setfiletype json
+  autocmd FileType terraform,yaml,sh,json setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+  autocmd FileType yaml setlocal autoindent nosmartindent
+  autocmd FileType python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
+  autocmd FileType c setlocal noexpandtab tabstop=8 shiftwidth=8 softtabstop=0
+augroup END
