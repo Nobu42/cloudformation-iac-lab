@@ -133,6 +133,44 @@ Resources:
       VpcId: !Ref VPC
       InternetGatewayId: !Ref InternetGateway
 
+    # Create a route table shared by the two public subnets.
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: sample-rt-public
+        - Key: Project
+          Value: cloudformation-iac-lab
+        - Key: Environment
+          Value: learning
+
+  # Send traffic to the Internet Gateway unless a more specific route matches.
+  PublicDefaultRoute:
+    Type: AWS::EC2::Route
+
+    # Wait until the Internet Gateway is attached to the VPC.
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId: !Ref InternetGateway
+
+  # Associate public subnet 01 with the public route table.
+  PublicSubnet01RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet01
+      RouteTableId: !Ref PublicRouteTable
+
+  # Associate public subnet 02 with the same public route table.
+  PublicSubnet02RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet02
+      RouteTableId: !Ref PublicRouteTable
+
 # Values displayed in the stack Outputs tab
 Outputs:
   # Output key
@@ -141,3 +179,5 @@ Outputs:
 
     # Ref returns the ID of the VPC created by this template
     Value: !Ref VPC
+
+
